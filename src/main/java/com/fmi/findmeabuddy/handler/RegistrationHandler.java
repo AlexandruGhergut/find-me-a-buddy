@@ -1,13 +1,10 @@
 package com.fmi.findmeabuddy.handler;
 
-import com.fmi.findmeabuddy.model.Account;
+import com.fmi.findmeabuddy.domain.Account;
 import com.fmi.findmeabuddy.repository.AccountRepository;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.MediaType;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class RegistrationHandler {
@@ -20,16 +17,17 @@ public class RegistrationHandler {
         this.accountRepository = accountRepository;
         this.passwordEncoder = passwordEncoder;
     }
-
-    @PostMapping("/user/register")
-    public ResponseEntity register(@RequestParam("username") String email,
-                                   @RequestParam("password") String password) {
-        Account account = Account.builder()
-                .email(email)
-                .password(passwordEncoder.encode(password))
-                .build();
-        accountRepository.save(account);
-
-        return ResponseEntity.status(HttpStatus.OK).build();
+    
+    @PostMapping(value = "/user/register",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public Account register(@RequestBody Account newAccount) {
+        
+        String encodedPassword = passwordEncoder.encode(newAccount.getPassword());
+        newAccount.setPassword(encodedPassword);
+        
+        accountRepository.save(newAccount);
+        
+        return newAccount;
     }
 }
