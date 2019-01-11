@@ -3,5 +3,3 @@ spring.jpa.hibernate:
   ddl-auto: validate
 
 management.endpoints.web.base-path: /
-
-server.port: 5000
