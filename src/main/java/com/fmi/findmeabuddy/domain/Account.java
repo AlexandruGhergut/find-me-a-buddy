@@ -1,6 +1,7 @@
 package com.fmi.findmeabuddy.domain;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fmi.findmeabuddy.domain.internal.Role;
 import com.fmi.findmeabuddy.domain.tracing.DateTimeTrackableEntity;
 import com.fmi.findmeabuddy.domain.tracing.DateTimeTrackableEntityListener;
 import lombok.*;
@@ -8,6 +9,7 @@ import lombok.*;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.ZonedDateTime;
+import java.util.List;
 
 import static com.fasterxml.jackson.annotation.JsonProperty.Access.*;
 
@@ -37,4 +39,8 @@ public class Account implements DateTimeTrackableEntity {
     @Column(name = "updated_at", updatable = false)
     @NotNull
     private ZonedDateTime updatedAt;
+
+    @Enumerated(EnumType.STRING)
+    @NotNull
+    private Role role;
 }
