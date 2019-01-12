@@ -1,6 +1,7 @@
 package com.fmi.findmeabuddy.handler;
 
 import com.fmi.findmeabuddy.domain.Account;
+import com.fmi.findmeabuddy.domain.internal.Role;
 import com.fmi.findmeabuddy.repository.AccountRepository;
 import org.springframework.http.MediaType;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -25,6 +26,8 @@ public class RegistrationHandler {
         
         String encodedPassword = passwordEncoder.encode(newAccount.getPassword());
         newAccount.setPassword(encodedPassword);
+
+        newAccount.setRole(Role.CLIENT);
         
         accountRepository.save(newAccount);
         
