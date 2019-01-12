@@ -3,7 +3,6 @@ package com.fmi.findmeabuddy.handler;
 import com.fmi.findmeabuddy.domain.Account;
 import com.fmi.findmeabuddy.matching.UserMatch;
 import com.fmi.findmeabuddy.repository.AccountRepository;
-import org.json.JSONObject;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
@@ -72,7 +71,6 @@ public class UserListHandler {
         List<BigInteger> closest_users = this.accountRepository.findByLocation(latitude + 5f, latitude - 5f, longitude + 5f, longitude - 5f);
 
         String jsonString = "";
-        List<JSONObject> entities = new ArrayList<JSONObject>();
 
         List<String> aq = new ArrayList<String>();
         UserMatch matchobj = new UserMatch();
@@ -122,21 +120,7 @@ public class UserListHandler {
                     } else {
                     jsonString = jsonString + "" + jsonEntry;
                     }
-
-/*
-                JSONObject entity = new JSONObject();
-                entity.put("email", email);
-                entity.put("hobby_one", hobby_one);
-                entity.put("hobby_two", hobby_two);
-                entities.add(entity);
-*/
-
-
-
-                //String score = ""+matchobj.StringtoInt(user1, user2);
-                //jsonString = jsonString + mapJson(email,hobby_one,hobby_two,hobby_three,hobby_four,hobby_five,birthday,gender,city,score);
-
-                //jsonString = jsonString + "[" + matchinguser + "]" + " " + matchobj.StringtoInt(user1, user2) + "  |  ";
+                    
             }
 
         }
