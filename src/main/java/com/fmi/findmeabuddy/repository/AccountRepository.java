@@ -15,13 +15,13 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
     Optional<Account> findByEmail(String email);
 
     //search for users around our user
-    @Query(value = "SELECT a.account_id as account_id FROM Account a, Profile b, Cities c WHERE a.account_id = b.account_id AND b.city_name = c.name AND c.latitude < :latup AND c.latitude > :latdw AND c.longitude < :lonup AND c.longitude > :londw", nativeQuery = true)
+    @Query(value = "SELECT a.account_id as account_id FROM Account a, Profile b, City c WHERE a.account_id = b.account_id AND b.city_name = c.name AND c.latitude < :latup AND c.latitude > :latdw AND c.longitude < :lonup AND c.longitude > :londw", nativeQuery = true)
     List<BigInteger> findByLocation(@Param("latup") float latup, @Param("latdw") float latdw,
                                     @Param("lonup") float lonup, @Param("londw") float londw);
 
 
     //get latitude and longitude for our user
-    @Query(value = "SELECT c.latitude, c.longitude FROM Account a, Profile b, Cities c WHERE c.name = b.city_name AND a.account_id = b.account_id AND a.account_id = :accid", nativeQuery = true)
+    @Query(value = "SELECT c.latitude, c.longitude FROM Account a, Profile b, City c WHERE c.name = b.city_name AND a.account_id = b.account_id AND a.account_id = :accid", nativeQuery = true)
     List<Float[]> getLatAndLong(@Param("accid") float accid);
 
     //get hobbies of our user
