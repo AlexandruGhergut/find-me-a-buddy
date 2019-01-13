@@ -1,6 +1,6 @@
 CREATE TABLE `Country` (
-    `id` smallint(5) AUTO_INCREMENT,
+    `country_id` smallint(5),
     `name` varchar(255) NOT NULL,
     `code` varchar(10) NOT NULL,
-    PRIMARY KEY(`id`)
+    PRIMARY KEY(`country_id`)
 );

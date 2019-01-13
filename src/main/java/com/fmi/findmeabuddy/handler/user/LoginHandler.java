@@ -1,4 +1,4 @@
-package com.fmi.findmeabuddy.handler;
+package com.fmi.findmeabuddy.handler.user;
 
 import com.fmi.findmeabuddy.domain.Account;
 import com.fmi.findmeabuddy.exception.HttpException;
