@@ -23,6 +23,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
             .antMatchers("/health").permitAll()
             .antMatchers("/user/login").permitAll()
+            .antMatchers("/user/register").permitAll()
             .antMatchers("/info/*").permitAll()
             .anyRequest().authenticated();
 
