@@ -24,7 +24,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .antMatchers("/health").permitAll()
             .antMatchers("/user/login").permitAll()
             .antMatchers("/user/register").permitAll()
-            .antMatchers("/info/*").permitAll()
+            .antMatchers("/info/**").permitAll()
             .anyRequest().authenticated();
 
         http.exceptionHandling().accessDeniedPage("/user/login");
