@@ -42,7 +42,7 @@ public class UserMatchHandler {
         }
 
         //the values here should be around 0.6f
-        List<BigInteger> closest_users = this.accountRepository.findByLocation(latitude + 5f, latitude - 5f, longitude + 5f, longitude - 5f);
+        List<BigInteger> closest_users = this.accountRepository.findByLocation(latitude + 0.6f, latitude - 0.6f, longitude + 0.6f, longitude - 0.6f);
 
         String jsonString = "";
 
