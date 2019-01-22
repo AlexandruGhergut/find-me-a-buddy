@@ -1,8 +1,12 @@
 package com.fmi.findmeabuddy.matching;
 
+import com.fmi.findmeabuddy.domain.Account;
+import com.fmi.findmeabuddy.domain.Hobby;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 public class UserMatch {
 
@@ -21,31 +25,20 @@ public class UserMatch {
         return result;
     }
 
-    public double StringtoInt(List<String[]> user1, List<String[]> user2){
+    public double StringtoInt(Account user1, Account user2){
 
         double score = 0;
-        List<String> list1 = new ArrayList<String>();
-        List<String> list2 = new ArrayList<String>();
 
-        Iterator user1_hobbies = user1.iterator();
-        Iterator user2_hobbies = user2.iterator();
-        while (user1_hobbies.hasNext() && user2_hobbies.hasNext()) {
-            Object[] u1_obj = (Object[]) user1_hobbies.next();
-            Object[] u2_obj = (Object[]) user2_hobbies.next();
+        Set<Hobby> user1Hobbies = user1.getProfile().getHobbies();
+        Set<Hobby> user2Hobbies = user2.getProfile().getHobbies();
 
-            for (int i=0;i<=4;i++){ //hardcoded, i know
-                list1.add(String.valueOf(u1_obj[i]));
-                list2.add(String.valueOf(u2_obj[i]));
-            }
+        List<Hobby> unique = new ArrayList<>(user1Hobbies);
+        for (Hobby hobby : user2Hobbies){
+            if (!unique.contains(hobby))
+                unique.add(hobby);
         }
 
-        List<String> unique = new ArrayList<String>(list1);
-        for (String x : list2){
-            if (!unique.contains(x))
-                unique.add(x);
-        }
-
-        for(String model : unique) {
+        for(Hobby model : unique) {
             System.out.println(unique.size());
             System.out.println(model);
         }
@@ -53,10 +46,10 @@ public class UserMatch {
         int[] leftVector = new int[unique.size()];
         int[] rightVector = new int[unique.size()];
 
-        for (String x : unique){
-            if(list1.contains(x))
+        for (Hobby x : unique){
+            if(user1Hobbies.contains(x))
                 leftVector[unique.indexOf(x)] = 1;
-            if(list2.contains(x))
+            if(user2Hobbies.contains(x))
                 rightVector[unique.indexOf(x)] = 1;
         }
 

@@ -15,6 +15,10 @@ import static com.fasterxml.jackson.annotation.JsonProperty.Access.*;
 
 @Entity
 @EntityListeners(DateTimeTrackableEntityListener.class)
+@NamedEntityGraph(
+        name = "AccountWithProfile",
+        attributeNodes = {@NamedAttributeNode("profile")}
+)
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
@@ -43,4 +47,8 @@ public class Account implements DateTimeTrackableEntity {
     @Enumerated(EnumType.STRING)
     @NotNull
     private Role role;
+
+    @OneToOne(fetch = FetchType.EAGER, optional = false, cascade = CascadeType.ALL, mappedBy = "account")
+    @JoinColumn(name = "account_id")
+    private Profile profile;
 }
