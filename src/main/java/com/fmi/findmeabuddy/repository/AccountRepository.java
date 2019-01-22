@@ -1,23 +1,25 @@
 package com.fmi.findmeabuddy.repository;
 
 import com.fmi.findmeabuddy.domain.Account;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import java.math.BigInteger;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
 public interface AccountRepository extends JpaRepository<Account, Long> {
 
+    @EntityGraph("AccountWithProfile")
     Optional<Account> findByEmail(String email);
 
     //search for users around our user
-    @Query(value = "SELECT a.account_id as account_id FROM Account a, Profile b, City c WHERE a.account_id = b.account_id AND b.city_name = c.name AND c.latitude < :latup AND c.latitude > :latdw AND c.longitude < :lonup AND c.longitude > :londw", nativeQuery = true)
-    List<BigInteger> findByLocation(@Param("latup") float latup, @Param("latdw") float latdw,
-                                    @Param("lonup") float lonup, @Param("londw") float londw);
+    @Query(value = "SELECT a as account_id FROM Account a, Profile b, City c WHERE a.account_id = b.account_id AND b.city_name = c.name AND c.latitude < :latup AND c.latitude > :latdw AND c.longitude < :lonup AND c.longitude > :londw", nativeQuery = true)
+    List<Account> findByLocation(@Param("latup") BigDecimal latup, @Param("latdw") BigDecimal latdw,
+                                 @Param("lonup") BigDecimal lonup, @Param("londw") BigDecimal londw);
 
 
     //get latitude and longitude for our user

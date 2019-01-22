@@ -1,48 +1,46 @@
 package com.fmi.findmeabuddy.handler.user;
 
+import com.fmi.findmeabuddy.domain.Account;
 import com.fmi.findmeabuddy.exception.HttpException;
 import com.fmi.findmeabuddy.matching.UserMatch;
 import com.fmi.findmeabuddy.repository.AccountRepository;
-import com.fmi.findmeabuddy.security.JwtTokenProvider;
+import com.fmi.findmeabuddy.util.AccountRetriever;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.math.BigInteger;
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
-import java.util.Iterator;
 import java.util.List;
 
 @RestController
 public class UserMatchHandler {
 
     private final AccountRepository accountRepository;
-    private final JwtTokenProvider jwtTokenProvider;
+    private final AccountRetriever accountRetriever;
 
     private static DecimalFormat df2 = new DecimalFormat(".##");
 
-    public UserMatchHandler(AccountRepository accountRepository, JwtTokenProvider jwtTokenProvider) {
+    public UserMatchHandler(AccountRepository accountRepository, AccountRetriever accountRetriever) {
         this.accountRepository = accountRepository;
-        this.jwtTokenProvider = jwtTokenProvider;
+        this.accountRetriever = accountRetriever;
     }
 
     @GetMapping(value = "/user/match", produces=MediaType.APPLICATION_JSON_VALUE)
     public String getById(@RequestHeader("Authorization") String bearerToken ) {
 
-        long currentUser = getAccountId(bearerToken);
-        List<Float[]> list = this.accountRepository.getLatAndLong(currentUser);
+        Account currentUser = accountRetriever.retrieve(bearerToken)
+                .orElseThrow(() -> new HttpException("No account found", HttpStatus.UNPROCESSABLE_ENTITY));
 
-        float latitude = 0f;
-        float longitude = 0f;
-        for (Float[] floats : list) {
-            latitude = Float.parseFloat(String.valueOf(floats[0]));
-            longitude = Float.parseFloat(String.valueOf(floats[1]));
-        }
+        BigDecimal latitude = currentUser.getProfile().getCity().getLatitude();
+        BigDecimal longitude = currentUser.getProfile().getCity().getLatitude();
 
         //the values here should be around 0.6f
-        List<BigInteger> closest_users = this.accountRepository.findByLocation(latitude + 0.6f, latitude - 0.6f, longitude + 0.6f, longitude - 0.6f);
+        BigDecimal offset = new BigDecimal(0.6);
+        List<Account> closest_users = this.accountRepository.findByLocation(latitude.add(offset),
+                latitude.subtract(offset), longitude.add( offset), longitude.subtract(offset));
 
         String jsonString = "";
 
@@ -50,29 +48,11 @@ public class UserMatchHandler {
         for (int i = 0; i < closest_users.size(); i++) {
             String email="", hobby_one="", hobby_two="", hobby_three="", hobby_four="", hobby_five="", birthday="", gender="", city="", account_id="";
 
-            List<String[]> user1 = getHobbies(currentUser);
-            long matchinguser = Long.parseLong(closest_users.get(i).toString());
-            List<String[]> user2 = getHobbies(matchinguser);
+            Account matchinguser = closest_users.get(i);
 
-            if(!(currentUser==matchinguser)) {
+            if(!currentUser.getAccountId().equals(matchinguser.getAccountId())) {
 
-                List<String[]> userdata = getProfileData(matchinguser);
-
-                Iterator itr_data = userdata.iterator();
-                while (itr_data.hasNext()) {
-                    Object[] obj = (Object[]) itr_data.next();
-                    email = String.valueOf(obj[0]);
-                    hobby_one = String.valueOf(obj[1]);
-                    hobby_two = String.valueOf(obj[2]);
-                    hobby_three = String.valueOf(obj[3]);
-                    hobby_four = String.valueOf(obj[4]);
-                    hobby_five = String.valueOf(obj[5]);
-                    birthday = String.valueOf(obj[6]);
-                    gender = String.valueOf(obj[7]);
-                    city = String.valueOf(obj[8]);
-                    account_id = String.valueOf(obj[9]);
-                }
-                double lscore = matchobj.StringtoInt(user1, user2);
+                double lscore = matchobj.StringtoInt(currentUser, matchinguser);
                 // { "name":"John", "age":30, "car":null }
 
                 String jsonEntry;
@@ -100,15 +80,6 @@ public class UserMatchHandler {
         jsonString = "["+jsonString+"]";
 
         return jsonString;
-    }
-
-    private long getAccountId(String token) {
-        String tokenValue = token.substring(7);
-        String email = jwtTokenProvider.getUsername(tokenValue);
-
-        return accountRepository.findByEmail(email)
-                .orElseThrow(() -> new HttpException("No account found", HttpStatus.UNPROCESSABLE_ENTITY))
-                .getAccountId();
     }
 
     private List<String[]> getHobbies(long id) {

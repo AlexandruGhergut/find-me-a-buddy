@@ -1,4 +1,5 @@
 CREATE TABLE `Profile` (
+    `profile_id` bigint(20) AUTO_INCREMENT,
     `account_id` bigint(20),
     `birthday` date NOT NULL,
     `gender` char(1) NOT NULL,
@@ -8,7 +9,7 @@ CREATE TABLE `Profile` (
     `hobby_four` varchar(64) NOT NULL,
     `hobby_five` varchar(64) NOT NULL,
     `city_id` varchar(255) NOT NULL,
-    PRIMARY KEY(`account_id`)
+    PRIMARY KEY(`profile_id`)
 );
 
 ALTER TABLE `Profile`
@@ -16,3 +17,6 @@ ADD CONSTRAINT `fk_Profile_Account` FOREIGN KEY (`account_id`) REFERENCES `Accou
 
 ALTER TABLE `Profile`
 ADD CONSTRAINT `fk_Profile_City` FOREIGN KEY (`city_id`) REFERENCES `City` (`city_id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+ALTER TABLE `Profile`
+ADD CONSTRAINT uk_profile_account_id UNIQUE (account_id);
