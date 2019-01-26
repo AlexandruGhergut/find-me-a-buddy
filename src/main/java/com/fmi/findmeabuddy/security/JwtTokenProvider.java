@@ -3,7 +3,6 @@ package com.fmi.findmeabuddy.security;
 import java.util.Base64;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
@@ -11,6 +10,8 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.fmi.findmeabuddy.domain.internal.Role;
 import com.fmi.findmeabuddy.exception.HttpException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -26,6 +27,8 @@ import io.jsonwebtoken.SignatureAlgorithm;
 
 @Component
 public class JwtTokenProvider {
+
+    final static Logger log = LoggerFactory.getLogger(JwtTokenProvider.class);
 
     @Value("${security.jwt.token.secret-key:secret-key}")
     private String secretKey;
@@ -82,6 +85,7 @@ public class JwtTokenProvider {
             Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
             return true;
         } catch (JwtException | IllegalArgumentException e) {
+            log.error("Expired or invalid JWT Token", e);
             throw new HttpException("Expired or invalid JWT token", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
