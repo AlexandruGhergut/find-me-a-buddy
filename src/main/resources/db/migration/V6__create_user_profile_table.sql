@@ -8,7 +8,7 @@ CREATE TABLE `Profile` (
     `hobby_three` varchar(64) NOT NULL,
     `hobby_four` varchar(64) NOT NULL,
     `hobby_five` varchar(64) NOT NULL,
-    `city_id` varchar(255) NOT NULL,
+    `city_id` int(11) NOT NULL,
     PRIMARY KEY(`profile_id`)
 );
 
