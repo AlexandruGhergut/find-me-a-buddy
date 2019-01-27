@@ -27,7 +27,7 @@ public class UserMatch {
 
     public double StringtoInt(Account user1, Account user2){
 
-        double score = 0;
+        double score;
 
         Set<Hobby> user1Hobbies = user1.getProfile().getHobbies();
         Set<Hobby> user2Hobbies = user2.getProfile().getHobbies();
@@ -36,11 +36,6 @@ public class UserMatch {
         for (Hobby hobby : user2Hobbies){
             if (!unique.contains(hobby))
                 unique.add(hobby);
-        }
-
-        for(Hobby model : unique) {
-            System.out.println(unique.size());
-            System.out.println(model);
         }
 
         int[] leftVector = new int[unique.size()];
