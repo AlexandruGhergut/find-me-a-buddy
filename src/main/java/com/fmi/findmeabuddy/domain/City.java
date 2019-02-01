@@ -36,4 +36,16 @@ public class City {
     private BigDecimal longitude;
 
     private String name;
+
+    @Override
+    public String toString() {
+        return "City{" +
+                "cityId=" + cityId +
+                ", regionId=" + regionId +
+                ", country=" + country +
+                ", latitude=" + latitude +
+                ", longitude=" + longitude +
+                ", name='" + name + '\'' +
+                '}';
+    }
 }

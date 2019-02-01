@@ -18,4 +18,12 @@ public class Hobby {
     private Integer hobbyId;
 
     private String name;
+
+    @Override
+    public String toString() {
+        return "Hobby{" +
+                "hobbyId=" + hobbyId +
+                ", name='" + name + '\'' +
+                '}';
+    }
 }
