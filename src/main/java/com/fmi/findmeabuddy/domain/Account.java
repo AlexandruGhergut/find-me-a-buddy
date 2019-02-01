@@ -50,4 +50,17 @@ public class Account implements DateTimeTrackableEntity {
     @OneToOne(fetch = FetchType.EAGER, optional = false, cascade = CascadeType.ALL, mappedBy = "account")
     @JoinColumn(name = "account_id")
     private Profile profile;
+
+    @Override
+    public String toString() {
+        return "Account{" +
+                "accountId=" + accountId +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
+                ", role=" + role +
+                ", profile=" + profile +
+                '}';
+    }
 }

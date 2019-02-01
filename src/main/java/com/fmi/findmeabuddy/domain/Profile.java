@@ -25,6 +25,12 @@ public class Profile {
     @JsonProperty(access = WRITE_ONLY)
     private Account account;
 
+    @Column(name = "first_name")
+    private String firstName = "Anonymous";
+
+    @Column(name = "last_name")
+    private String lastName = "Anonymous";
+
     private Date birthday;
 
     private Character gender;
@@ -39,4 +45,17 @@ public class Profile {
         inverseJoinColumns = @JoinColumn(name = "hobby_id")
     )
     private Set<Hobby> hobbies;
+
+    @Override
+    public String toString() {
+        return "Profile{" +
+                "profileId=" + profileId +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", birthday=" + birthday +
+                ", gender=" + gender +
+                ", city=" + city +
+                ", hobbies=" + hobbies +
+                '}';
+    }
 }
