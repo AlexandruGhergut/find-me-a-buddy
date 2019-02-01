@@ -3,3 +3,5 @@ spring.jpa.hibernate:
   ddl-auto: validate
 
 management.endpoints.web.base-path: /
+
+spring.resources.chain.cache: false
