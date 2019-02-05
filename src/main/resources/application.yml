@@ -5,3 +5,5 @@ spring.jpa.hibernate:
 management.endpoints.web.base-path: /
 
 spring.resources.chain.cache: false
+
+spring.mvc.dispatch-options-request: true
